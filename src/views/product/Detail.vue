@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
-    <div id="page-wrap">
+    <div id="page-wrap" v-if="product">
       <div id="img-wrap">
         <img :src="product.imageUrl" alt="" />
       </div>
@@ -15,13 +15,19 @@
         </p>
       </div>
     </div>
+
+    <error v-else />
   </div>
 </template>
 
 <script>
 import { products } from "../../data-seed";
+import error from "../errors/ErrorNotFound.vue";
 
 export default {
+  components: {
+    error,
+  },
   data() {
     return {
       products,
@@ -34,9 +40,9 @@ export default {
       });
     },
   },
-  mounted() {
-    console.log(this.product);
-  },
+  // mounted() {
+  //   console.log(this.product);
+  // },
 };
 </script>
 
