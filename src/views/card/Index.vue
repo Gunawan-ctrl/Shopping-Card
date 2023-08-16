@@ -4,14 +4,6 @@
     <div class="page-wrap">
       <h1>Shopping Cart</h1>
       <ItemCart v-for="item in cartItems" :key="item.id" :item="item" />
-      <!-- <div v-for="item in cartItems" :key="item.id" class="product-container">
-        <img :src="item.imageUrl" class="product-image" />
-        <div class="details-wrap">
-          <h3>{{ item.name }}</h3>
-          <p>Rp {{ item.price }}</p>
-        </div>
-        <button class="remove-button">Remove</button>
-      </div> -->
       <h3 id="total-price">Total : Rp {{ totalPrice }}</h3>
       <button id="checkout-button">Checkout</button>
     </div>
@@ -19,7 +11,7 @@
 </template>
 
 <script>
-import { cartItems } from "../../data-seed";
+import axios from "axios";
 import ItemCart from "../../components/ItemCart";
 
 export default {
@@ -28,13 +20,26 @@ export default {
   },
   data() {
     return {
-      cartItems,
+      cartItems: [],
     };
   },
   computed: {
     totalPrice() {
       return this.cartItems.reduce((sum, item) => sum + Number(item.price), 0);
     },
+  },
+  async created() {
+    const result = await axios.get("http://localhost:8000/api/orders/user/1");
+    console.log(result);
+    let data = Object.assign(
+      {},
+      ...result.data.map((result) => ({
+        user_id: result.user_id,
+        cart_items: result.products,
+      }))
+    );
+    this.cartItems = data.cart_items;
+    console.log(this.cartItems);
   },
 };
 </script>
