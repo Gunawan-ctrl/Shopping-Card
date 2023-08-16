@@ -5,11 +5,14 @@
       <div id="img-wrap">
         <img :src="`http://localhost:8000${product.imageUrl}`" alt="" />
       </div>
+      <div v-if="notif" class="notif">Item added succesfully</div>
       <div id="product-details">
         <h1>{{ product.name }}</h1>
         <h3 id="price">Rp {{ product.price }}</h3>
         <p>Everage Rating: {{ product.averageRating }}</p>
-        <button id="add-to-cart">Add to Cart</button>
+        <button @click="addToCart(product.code)" id="add-to-cart">
+          Add to Cart
+        </button>
         <p>
           {{ product.description }}
         </p>
@@ -31,7 +34,16 @@ export default {
   data() {
     return {
       product: {},
+      notif: false,
     };
+  },
+  methods: {
+    addToCart(product) {
+      axios.post("http://localhost:8080/api/orders/user/1", {
+        product: product,
+      });
+      this.notif = true;
+    },
   },
   async created() {
     const code = this.$route.params.id;
