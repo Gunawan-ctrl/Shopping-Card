@@ -5,7 +5,9 @@
       <h3>{{ item.name }}</h3>
       <p>Rp {{ item.price }}</p>
     </div>
-    <button class="remove-button">Remove</button>
+    <button @click="$emit('remove-item', item.code)" class="remove-button">
+      Remove
+    </button>
   </div>
 </template>
 

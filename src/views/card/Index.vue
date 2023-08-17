@@ -3,8 +3,13 @@
   <div>
     <div class="page-wrap">
       <h1>Shopping Cart</h1>
-      <ItemCart v-for="item in cartItems" :key="item.id" :item="item" />
-      <h3 id="total-price">Total : Rp {{ totalPrice }}</h3>
+      <ItemCart
+        v-for="item in cartItems"
+        :key="item.id"
+        :item="item"
+        v-on:remove-item="removeFromCart($event)"
+      />
+      <h3 id="total-price">Total : Rp {{ totalPrice }}.00</h3>
       <button id="checkout-button">Checkout</button>
     </div>
   </div>
@@ -23,6 +28,19 @@ export default {
       cartItems: [],
     };
   },
+  methods: {
+    async removeFromCart(product) {
+      await axios.delete(
+        `http://localhost:8000/api/orders/user/2/product/${product}`
+      );
+      let indexCart = this.cartItems
+        .map(function (item) {
+          return item.code;
+        })
+        .indexOf(product);
+      this.cartItems.splice(indexCart, 1);
+    },
+  },
   computed: {
     totalPrice() {
       return this.cartItems.reduce((sum, item) => sum + Number(item.price), 0);
@@ -30,7 +48,6 @@ export default {
   },
   async created() {
     const result = await axios.get("http://localhost:8000/api/orders/user/1");
-    console.log(result);
     let data = Object.assign(
       {},
       ...result.data.map((result) => ({
@@ -39,7 +56,6 @@ export default {
       }))
     );
     this.cartItems = data.cart_items;
-    console.log(this.cartItems);
   },
 };
 </script>
