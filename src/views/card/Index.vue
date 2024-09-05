@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import ItemCart from "../../components/ItemCart";
+import ItemCart from "@/components/ItemCart";
+import axios from "@/boot/axios";
 
 export default {
   components: {
@@ -30,9 +30,7 @@ export default {
   },
   methods: {
     async removeFromCart(product) {
-      await axios.delete(
-        `http://localhost:8000/api/orders/user/2/product/${product}`
-      );
+      await axios.delete(`orders/user/2/product/${product}`);
       let indexCart = this.cartItems
         .map(function (item) {
           return item.code;
@@ -47,7 +45,8 @@ export default {
     },
   },
   async created() {
-    const result = await axios.get("http://localhost:8000/api/orders/user/1");
+    const result = await axios.get("orders/user/1");
+    console.log("result", result);
     let data = Object.assign(
       {},
       ...result.data.map((result) => ({

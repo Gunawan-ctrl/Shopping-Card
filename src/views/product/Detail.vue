@@ -4,7 +4,10 @@
     <div id="page-wrap" v-if="product">
       <h4 v-if="notif" class="notif">Item added succesfully</h4>
       <div id="img-wrap">
-        <img :src="`http://localhost:8000${product.imageUrl}`" alt="" />
+        <img
+          :src="`https://vuestore-api.vercel.app${product.imageUrl}`"
+          alt=""
+        />
       </div>
       <div id="product-details">
         <h1>{{ product.name }}</h1>
@@ -24,7 +27,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/boot/axios";
 import error from "../errors/ErrorNotFound.vue";
 
 export default {
@@ -39,7 +42,7 @@ export default {
   },
   methods: {
     addToCart(product) {
-      axios.post("http://localhost:8000/api/orders/user/1", {
+      axios.post("orders/user/1", {
         product: product,
       });
       this.notif = true;
@@ -48,9 +51,7 @@ export default {
   },
   async created() {
     const code = this.$route.params.id;
-    const result = await axios.get(
-      `http://localhost:8000/api/products/${code}`
-    );
+    const result = await axios.get(`products/${code}`);
     this.product = result.data;
   },
 };

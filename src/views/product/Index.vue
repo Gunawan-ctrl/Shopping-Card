@@ -13,25 +13,24 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-import productItem from "../../components/ProductItem";
+<script setup>
+import axios from "@/boot/axios";
+import productItem from "@/components/ProductItem";
+import * as vue from "vue";
 
-export default {
-  components: {
-    productItem,
-  },
-  data() {
-    return {
-      products: [],
-    };
-  },
-  async created() {
-    const result = await axios.get("http://localhost:8000/api/products/");
-    this.products = result.data;
-    // console.log(this.products);
-  },
+const products = vue.ref([]);
+
+const getData = async () => {
+  try {
+    const response = await axios.get("products");
+    products.value = response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
+vue.onMounted(() => {
+  getData();
+});
 </script>
 
 <style scoped>

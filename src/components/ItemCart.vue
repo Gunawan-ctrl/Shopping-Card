@@ -1,6 +1,9 @@
 <template>
   <div class="product-container">
-    <img :src="`http://localhost:8000${item.imageUrl}`" class="product-image" />
+    <img
+      :src="`https://vuestore-api.vercel.app${item.imageUrl}`"
+      class="product-image"
+    />
     <div class="details-wrap">
       <h3>{{ item.name }}</h3>
       <p>Rp {{ item.price }}</p>
